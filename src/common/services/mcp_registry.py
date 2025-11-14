@@ -2,6 +2,10 @@
 
 import httpx
 from pydantic import BaseModel, Field
+from rich.console import Console
+from rich.progress import Progress, SpinnerColumn, TextColumn
+
+console = Console()
 
 
 class Repository(BaseModel):
@@ -97,3 +101,79 @@ async def fetch_servers_page(
         data = response.json()
         
     return RegistryResponse.model_validate(data)
+
+
+async def fetch_all_servers(
+    limit: int = 100,
+    timeout: float = 30.0,
+    show_progress: bool = True,
+) -> list[ServerEntry]:
+    """Fetch all servers from the MCP registry using pagination.
+    
+    Args:
+        limit: Maximum number of servers per page (default: 100).
+        timeout: Request timeout in seconds (default: 30.0).
+        show_progress: Whether to show progress indicator (default: True).
+        
+    Returns:
+        List of all server entries from the registry.
+        
+    Raises:
+        httpx.HTTPError: If an API request fails.
+        pydantic.ValidationError: If a response format is invalid.
+    """
+    all_servers: list[ServerEntry] = []
+    cursor: str | None = None
+    page_count = 0
+    
+    if show_progress:
+        with Progress(
+            SpinnerColumn(),
+            TextColumn("[progress.description]{task.description}"),
+            console=console,
+        ) as progress:
+            task = progress.add_task("Fetching servers from MCP registry...", total=None)
+            
+            while True:
+                response = await fetch_servers_page(
+                    limit=limit,
+                    cursor=cursor,
+                    timeout=timeout,
+                )
+                
+                all_servers.extend(response.servers)
+                page_count += 1
+                
+                progress.update(
+                    task,
+                    description=f"Fetched {len(all_servers)} servers ({page_count} pages)...",
+                )
+                
+                # Check if there are more pages
+                if not response.metadata.next_cursor:
+                    break
+                    
+                cursor = response.metadata.next_cursor
+                
+            progress.update(
+                task,
+                description=f"✓ Fetched {len(all_servers)} servers from {page_count} pages",
+            )
+    else:
+        while True:
+            response = await fetch_servers_page(
+                limit=limit,
+                cursor=cursor,
+                timeout=timeout,
+            )
+            
+            all_servers.extend(response.servers)
+            page_count += 1
+            
+            # Check if there are more pages
+            if not response.metadata.next_cursor:
+                break
+                
+            cursor = response.metadata.next_cursor
+    
+    return all_servers
