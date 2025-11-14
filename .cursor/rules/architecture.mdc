@@ -1,0 +1,33 @@
+---
+description: Architecture boundaries and layering rules
+globs: 
+alwaysApply: false
+---
+
+# Architecture Standards
+
+We enforce a clear, layered architecture. Business logic belongs in shared libraries; presentation/wrappers live at the edges.
+
+## Layers
+
+- Shared domain and services: `src/common/**` (models, utils, and `services/**`)
+- CLI wrappers: `scripts/**` and `cli.py`
+
+## Rules
+
+- Business logic must be implemented in `src/common/**` or `src/ia_lib/operations/**`.
+- CLI (`scripts/**`) contain no business logic. They are thin wrappers that:
+  - parse inputs
+  - call shared functions/services
+  - format/return results
+- All file I/O or system actions (e.g., opening files) must be implemented in `src/common/services/**` (or `src/common/**`), not in wrappers.
+- Wrappers must not duplicate logic that exists in shared libraries.
+- Prefer adding a new function in `src/common/services/**` before adding a CLI command.
+
+## Checklist for new features
+
+1. Implement a service function in `src/common/services/**` (or extend `src/ia_lib/operations/**`).
+2. Write unit tests close to the code (pytest only).
+3. Add a CLI command in `scripts/**` that calls the service.
+4. Update relevant README docs.
+

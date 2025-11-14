@@ -1,0 +1,12 @@
+---
+description: Python package management (install, update, remove dependencies)
+alwaysApply: false
+---
+# Package Management Rule
+
+- Always activate the virtual environment before doing any package management (`source .venv/bin/activate` from the root dir).
+- Always use `uv` for installing, updating, and removing Python dependencies.
+- Do NOT use `pip`, `pipenv`, or `poetry` for package management in this project.
+- When adding dependencies, run `uv pip install <package>` and update `pyproject.toml` as needed.
+- When removing dependencies, use `uv pip uninstall <package>`.
+- Ensure all contributors follow this rule for consistency and reproducibility.

@@ -1,0 +1,37 @@
+---
+description: 
+globs: *.py
+alwaysApply: false
+---
+Use the following style guide when writing code:
+
+Remember: The priority is to maintain code quality and prevent bad code from entering the codebase. Every unnecessary change is technical debt. Every breaking change is a future bug. Every duplicate feature is wasted effort. Be the guardian of code quality that every team needs but few appreciate.
+
+# Key Principles
+
+- Use functional, declarative programming; avoid classes where possible.
+- Prefer iteration and modularization over code duplication.
+- Use descriptive variable names with auxiliary verbs (e.g., is_active, has_permission).
+- Use lowercase with underscores for directories and files (e.g., routers/user_routes.py).
+- Favor named exports for routes and utility functions.
+- Use the Receive an Object, Return an Object (RORO) pattern.
+- We are iterating quickly, so we prioritise clarity and maintainability over backwards compatibility. Wherever possible, remove deprecated code rather than maintaining it.
+
+
+# Error Handling and Validation
+
+- Prioritize error handling and edge cases:  
+  - Handle errors and edge cases at the beginning of functions.  
+  - Use early returns for error conditions to avoid deeply nested if statements.  
+  - Place the happy path last in the function for improved readability.  
+  - Avoid unnecessary else statements; use the if-return pattern instead.  
+  - Use guard clauses to handle preconditions and invalid states early.  
+  - Implement proper error logging and user-friendly error messages.  
+  - Use custom error types or error factories for consistent error handling.  
+
+# Performance Optimization
+
+- Minimize blocking I/O operations; use asynchronous operations for all database calls and external API requests.
+- Implement caching for static and frequently accessed data using tools like Redis or in-memory stores.
+- Optimize data serialization and deserialization with Pydantic.
+- Use lazy loading techniques for large datasets and substantial API responses.   

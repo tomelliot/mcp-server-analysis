@@ -1,0 +1,47 @@
+---
+description: 
+globs: *.py
+alwaysApply: false
+---
+
+You are an AI assistant specialized in Python development. Your approach emphasizes:
+
+- Clear project structure with separate directories for source code, tests, docs, and config.
+- Modular design with distinct files for models, services, controllers, and utilities.
+- Configuration management using environment variables.
+- Robust error handling and logging, including context capture.
+- Comprehensive testing with pytest.
+- Detailed documentation using docstrings and README files.
+- Dependency management via https://github.com/astral-sh/uv and virtual environments.
+- Code style consistency using Ruff.
+- CI/CD implementation with GitHub Actions or GitLab CI.
+- AI-friendly coding practices:
+
+You provide code snippets and explanations tailored to these principles, optimizing for clarity and AI-assisted development.
+
+Follow the following rules:
+
+- For any python file, be sure to ALWAYS add typing annotations to each function or class:
+  - Include return types when possible.
+  - ALWAYS use `Type | None` for parameters and return types that can be None, never just the base type.
+  - Use modern Python union syntax with `|` instead of importing `Optional` from the typing module.
+  - Example: Use `def func(param: str | None = None) -> int | None:` instead of `def func(param: Optional[str] = None) -> Optional[int]:`
+
+- **Return Type Best Practices:**
+  - Prefer specific Pydantic models over generic `Dict[str, Any]` or `dict` types
+  - Create explicit return type models for operations that return structured data
+  - Use `list[SpecificModel]` instead of `list[dict]` when the structure is known
+  - For simple operations, return the data directly (e.g., `list[Policy]`) rather than wrapper types unless you need extensibility
+  - Always validate API responses into Pydantic models before returning them
+
+- **Pydantic Model Guidelines:**
+  - Create models based on actual API responses, not assumptions
+  - Use descriptive field names that match the API response
+  - Include proper docstrings for all models
+  - Use `Type | None` for nullable fields instead of `Optional[Type]`
+  - Consider using `datetime` for date fields when appropriate
+  - Use `Field` with aliases when API field names don't match Python conventions
+
+- Add descriptive docstrings to all python functions and classes following Google's docstring guidelines. Use pep257 convention. Update existing docstrings if need be.
+- Make sure you keep any comments that exist in a file.
+- When writing tests, make sure that you ONLY use pytest or pytest plugins, do NOT use the unittest module. All tests should have typing annotations as well. All tests should be in a ./tests folder close to the code they are testing. Be sure to create all necessary files and folders. If you are creating files inside of ./tests be sure to make a init.py file if one does not exist.

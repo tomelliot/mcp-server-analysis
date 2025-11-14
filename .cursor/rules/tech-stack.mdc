@@ -1,0 +1,17 @@
+---
+description: The technology stack used in this repo
+globs: 
+alwaysApply: false
+---
+# Technology Stack
+
+- **Python Version:** Python 3.12
+- **Dependency Management:** `uv`
+- **Code Formatting:** Ruff (replaces `black`, `isort`, `flake8`)
+- **Type Hinting:** Strictly use the `typing` module. All functions, methods, and class members must have type annotations.
+- **Data Validation & Modeling:** Pydantic for API response validation and data modeling
+- **Testing Framework:** `pytest`
+- **Documentation:** Google style docstring
+- **Environment Management:** `uv`
+- **Asynchronous Programming:** Prefer `async` and `await`
+- **Version Control:** `git`

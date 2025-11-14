@@ -1,0 +1,15 @@
+---
+description: Conventions to use for CLI scripts
+globs: 
+alwaysApply: false
+---
+
+- When creating command-line interfaces with Typer, use positional arguments (`typer.Argument`) for all required fields. Use named options (`typer.Option`) for all non-required (optional) fields.
+
+# CLI Rules
+
+- Follow the Architecture Standards rules for layering and boundaries (see `architecture.mdc`).
+- Use Typer for argument parsing and Rich for output.
+- Validate inputs early and exit with helpful errors (use `typer.Exit(1)` on failure).
+- Prefer async operations by delegating to async functions in `src/ia_lib/operations`.
+
