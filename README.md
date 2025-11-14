@@ -111,6 +111,32 @@ python scripts/analyze_mcp_servers.py analyze --github-token "your_token_here"
 3. Select scopes: `public_repo` (read-only access)
 4. Copy the generated token
 
+### Refetch Missing Data
+
+If your initial data collection was incomplete (e.g., due to rate limiting or interruption), you can refetch missing GitHub statistics:
+
+```bash
+# Refetch only missing data
+python scripts/analyze_mcp_servers.py refetch mcp_servers_data.csv
+
+# Save to a different file
+python scripts/analyze_mcp_servers.py refetch mcp_servers_data.csv -o updated_data.csv
+
+# Use a GitHub token for better success rate
+export GITHUB_TOKEN="your_token_here"
+python scripts/analyze_mcp_servers.py refetch mcp_servers_data.csv
+
+# Force refetch all data (even rows with existing stats)
+python scripts/analyze_mcp_servers.py refetch mcp_servers_data.csv --force
+```
+
+The `refetch` command:
+- Loads your existing CSV file
+- Identifies rows with missing GitHub stats (null values in `stars` or `days_since_commit`)
+- Refetches only the missing data
+- Updates the CSV with new statistics
+- By default, overwrites the input file (use `-o` to save elsewhere)
+
 ### Visualize Existing Data
 
 If you already have collected data, regenerate plots without re-fetching:
@@ -127,6 +153,7 @@ python scripts/analyze_mcp_servers.py --help
 
 # Command-specific help
 python scripts/analyze_mcp_servers.py analyze --help
+python scripts/analyze_mcp_servers.py refetch --help
 python scripts/analyze_mcp_servers.py visualize --help
 ```
 
